@@ -15,6 +15,8 @@ const startServer = async () => {                                           //Cr
            res.send("Hello World, Esto es una Prueba de Servicio");         //Enviamos como respuesta un mensaje
         });
 
+        app.use('/api/product', require('./routes/ProductRoute'));
+
         app.listen(port, () => {                                            //Arrancamos la aplicacion con el puerto seleccionado con la libreria express(listen)
             console.log(`Servidor Corriendo en http://localhost:${port}`);
         })
