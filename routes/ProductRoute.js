@@ -56,5 +56,43 @@ router.post('/',                                                    //Creamos el
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+router.put('/:id',
+    [
+        check('serial',"El Campo Serial Es requerido").notEmpty(),
+        check('name',"El campo Name es Requerido").notEmpty(),
+        check('price', "El campo Price es Requerido").notEmpty(),
+        check('description',"El campo Description es Requerido").notEmpty(),
+        check('status', "El campo Status debe de ser With_Stock, Out_Stock").isIn(['With_Stock','Out_Stock'])
+    ],
+    async (req,res) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({errors: errors.array()});
+            }
+    
+            let {
+                serial, name,
+                price, description,
+                status
+            } = req.body;
+    
+            const product = await Product.findByIdAndUpdate(
+                req.params.id,{
+                    serial: req.body.serial,
+                    name: req.body.name,
+                    price: req.body.price,
+                    description: req.body.description,
+                    status: req.body.status
+                },{new: true}
+            );
+    
+            res.json(product)
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({error: "Error al Actualizar el Producto"})
+        }
+    }
+);
 
 module.exports = router;                                             //Exportamos el router para que pueda ser manejado en el index
