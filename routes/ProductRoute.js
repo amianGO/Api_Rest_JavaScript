@@ -95,4 +95,23 @@ router.put('/:id',
     }
 );
 
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+router.delete('/:id',
+    async (req,res) => {
+        try {
+            const product = await Product.findById(req.params.id);
+            if (!product) {
+                res.status(404).json({msg: "Producto no Encontrado"})
+            }
+
+            await Product.findByIdAndDelete(req.params.id);
+            res.json({msg: "Producto Eliminado Correctamente"});
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({error: "Error al eliminar el Producto"});
+        }
+    }
+)
+
 module.exports = router;                                             //Exportamos el router para que pueda ser manejado en el index
